@@ -15,6 +15,27 @@
       src="https://kit.fontawesome.com/0e6673a1b2.js"
       crossorigin="anonymous"
     ></script>
+    <style>
+      .img-product {
+        object-fit: cover;
+        height: 250px;
+        transition: 0.5s;
+        filter: opacity(75%);
+      }
+      .img-product:hover {
+        filter: opacity(100%);
+      }
+      .bottom-right {
+        position: absolute;
+        bottom: 8px;
+        right: 16px;
+        color: black;
+      }
+      a.custom-card,
+      a.custom-card:hover {
+          color: inherit;
+      }
+    </style>
   </head>
   <body>
     <!-- Begin navbar -->
@@ -48,7 +69,7 @@
             <li class="nav-item">
               <a
                 class="nav-link"
-                href="bills.php"
+                href="#"
                 style="text-transform: uppercase;"
                 >Bills</a
               >
@@ -56,7 +77,7 @@
             <li class="nav-item">
               <a
                 class="nav-link"
-                href="products.php"
+                href="#"
                 style="text-transform: uppercase;"
                 >Product</a
               >
@@ -80,34 +101,34 @@
     <main role="main" class="container">
       <div class="container">
         <div class="row">
+          <?php
+            $con = mysqli_connect('localhost', 'root', '', 'test');
+            if(!($con))
+              die();
+            $cmd = "SELECT * FROM images ORDER BY time DESC";
+            $query = mysqli_query($con, $cmd);
+            if ($query->num_rows > 0)
+              while ($row = mysqli_fetch_assoc($query)) {
+          ?>
           <div class="col-md-3">
-            <div class="card">
-              <img
-                src="https://i.imgur.com/3woODot.jpg"
-                class="card-img-top"
-                style="object-fit: cover; height: 300px; width: auto;"
-              />
-              <div class="card-body">
-                <p class="card-text">
-                  <h5>Beautiful girl!</h5>
-                </p>
+            <a data-toggle="modal" data-target="#i<?php echo $row['id']; ?>" class="custom-card">
+              <div class="card mb-3">
+                <img src="<?php echo $row['link']; ?>" class="img-product" />
+                    <small class="bottom-right">Last updated: <?php echo date('d/m/Y', strtotime($row['time'])); ?></small>
+              </div>
+            </a>
+          </div>
+          <!-- Modal -->
+          <div class="modal fade" id="i<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="imageModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <img src="<?php echo $row['link']; ?>" width="100%">
               </div>
             </div>
           </div>
-          <div class="col-md-3">
-                <div class="card">
-                  <img
-                    src="https://i.imgur.com/ldgoDUy.jpg"
-                    class="card-img-top"
-                    style="object-fit: cover; height: 300px; width: auto;"
-                  />
-                  <div class="card-body">
-                    <p class="card-text">
-                      <h5>Beautiful girl!</h5>
-                    </p>
-                  </div>
-                </div>
-              </div>
+          <?php
+              }
+          ?>
         </div>
       </div>
     </main>
