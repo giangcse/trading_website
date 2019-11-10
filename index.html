@@ -76,25 +76,48 @@
       </div>
     </nav>
     <div class="container">
+      <div class="row">
+        <form onchange="showImg()" class="col-md">
+          <div class="form-group">
+            <label for="url">Imgur's Link</label>
+            <input
+              type="url"
+              name="url"
+              id="url"
+              placeholder="Paste your Imgur's link"
+              class="form-control"
+            />
+          </div>
+        </form>
+      </div>
       <div class="row" id="container"></div>
     </div>
 
     <script>
-      var xmlhttp = new XMLHttpRequest();
-      var x = "";
-      xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          var myObj = JSON.parse(this.responseText);
-          for (i in myObj.link) {
-            document.getElementById("container").innerHTML +=
-              '<div class="col-md-3"><div class="custom-card"><div class="card mb-3"><img src="https://imgur.com/' +
-              myObj.link[i] +
-              '" class="img-product" /></div></div></div>';
-          }
+      function showImg() {
+        var url = document.getElementById("url").value;
+        var container = document.getElementById("container");
+        var img = document.getElementById("img");
+        var show = document.getElementById("show");
+        var data = { link: [] };
+        var str = "";
+        if (url !== "") {
+          link = url.substr(-11);
+          data.link += link;
+          json = JSON.stringify(data);
+          localStorage.setItem("data", json);
         }
-      };
-      xmlhttp.open("GET", "data.json", true);
-      xmlhttp.send();
+
+        text = localStorage.getItem("data");
+        obj = JSON.parse(text);
+        for (i in obj.link) {
+          str += obj.link[i];
+        }
+        container.innerHTML +=
+          '<div class="col-md-3"><div class="custom-card"><div class="card mb-3"><img src="https://i.imgur.com/' +
+          str +
+          '" class="img-product"/></div></div></div>';
+      }
     </script>
     <nav class="navbar navbar-light bg-light" style="text-align: right;">
       <div class="container">
