@@ -24,6 +24,8 @@
       }
       .img-product:hover {
         filter: opacity(100%);
+        background-color: black;
+        transform: scale(1.05);
       }
       .bottom-right {
         position: absolute;
@@ -31,23 +33,15 @@
         right: 16px;
         color: black;
       }
-      a.custom-card,
-      a.custom-card:hover {
-          color: inherit;
-      }
     </style>
   </head>
   <body>
-    <!-- Begin navbar -->
     <nav
       class="navbar navbar-expand-md navbar-dark bg-dark mb-4 sticky-top"
       style="background-image: linear-gradient(-90deg, #2ecc71, #16a085);"
     >
       <div class="container">
-        <i
-          class="fab fa-d-and-d-beyond"
-          style="font-size: 50px; color: white;"
-        ></i>
+        <i class="fab fa-google" style="font-size: 30px; color: white;"></i>
         <button
           class="navbar-toggler"
           type="button"
@@ -66,22 +60,6 @@
                 >Dashboard <span class="sr-only">(current)</span></a
               >
             </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="#"
-                style="text-transform: uppercase;"
-                >Bills</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="#"
-                style="text-transform: uppercase;"
-                >Product</a
-              >
-            </li>
           </ul>
           <span class="navbar-text">
             <a
@@ -97,41 +75,40 @@
         </div>
       </div>
     </nav>
+    <div class="container">
+      <div class="row" id="container"></div>
+    </div>
 
-    <main role="main" class="container">
+    <script>
+      var xmlhttp = new XMLHttpRequest();
+      var x = "";
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var myObj = JSON.parse(this.responseText);
+          for (i in myObj.link) {
+            document.getElementById("container").innerHTML +=
+              '<div class="col-md-3"><div class="custom-card"><div class="card mb-3"><img src="https://imgur.com/' +
+              myObj.link[i] +
+              '" class="img-product" /></div></div></div>';
+          }
+        }
+      };
+      xmlhttp.open("GET", "data.json", true);
+      xmlhttp.send();
+    </script>
+    <nav class="navbar navbar-light bg-light" style="text-align: right;">
       <div class="container">
-        <div class="row">
-          <?php
-            $con = mysqli_connect('sql306.epizy.com', 'epiz_23677593', '1Nox4tmcdwUz', 'epiz_23677593_test');
-            if(!($con))
-              die();
-            $cmd = "SELECT * FROM images ORDER BY time DESC";
-            $query = mysqli_query($con, $cmd);
-            if ($query->num_rows > 0)
-              while ($row = mysqli_fetch_assoc($query)) {
-          ?>
-          <div class="col-md-3">
-            <a data-toggle="modal" data-target="#i<?php echo $row['id']; ?>" class="custom-card">
-              <div class="card mb-3">
-                <img src="<?php echo $row['link']; ?>" class="img-product" />
-                    <small class="bottom-right">Last updated: <?php echo date('d/m/Y', strtotime($row['time'])); ?></small>
-              </div>
-            </a>
-          </div>
-          <!-- Modal -->
-          <div class="modal fade" id="i<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="imageModal" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <img src="<?php echo $row['link']; ?>" width="100%">
-              </div>
-            </div>
-          </div>
-          <?php
-              }
-          ?>
-        </div>
+        <p class="text-muted">
+          2019 &copy;
+          <a
+            href="https://www.facebook.com/giangpt2808"
+            style="text-decoration: none;"
+            >giang</a
+          >
+          by using Bootstrap 4.3 and JSON
+        </p>
       </div>
-    </main>
+    </nav>
   </body>
   <script
     src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
